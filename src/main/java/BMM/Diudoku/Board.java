@@ -25,6 +25,10 @@ public class Board {
     private int [][] board; 
     
     /**
+     * Number represent value of the board
+     */
+    private int value = 0;
+    /**
      * Constructor of the Board class that make a board of 9x9
      */
     public Board () {
@@ -215,11 +219,62 @@ public class Board {
      * @param alfa 
      * @param beta
      * @return the value of a board
+     * @throws CloneNotSupportedException 
      */
-    public int minimaxAlfaBeta(Board board, int alfa, int beta) {
-        //TODO Implement this method
-        return 0;
+    public int minimaxAlfaBeta(Board board, int alfa, int beta, Boolean player) throws CloneNotSupportedException {
+        bestPlay(board);
+    	if (board.value == 81) 
+        	return board.value;
+    	for (Board b : generateSon(board)) {
+    		if (player)
+    			alfa = Math.max(alfa, minimaxAlfaBeta(b, alfa, beta, false));
+    		else
+    			beta = Math.min(beta, minimaxAlfaBeta(b, alfa, beta, true));
+    	} 
+        if (player)
+        	return alfa;
+        else
+        	return beta;
     }
+    
+    /**
+     * Method to build the sons of the board
+     * @param board
+     * @return son of the board
+     * @throws CloneNotSupportedException
+     */
+    private Board[] generateSon(Board board) throws CloneNotSupportedException {
+    	Board[] a = new Board[10];
+    	int i = -1;
+	    		for (int j = 0; j < ROWS; j++) {
+	    			for (int k = 0; k < COLUMNS; k++) {
+	    				for (int m = 1; m <= 9; m++) {
+	    					if (board.isValidNumber(m, j, k)) {
+	    						Board b = (Board) board.clone();
+	    						b.setCell(m, j, j);
+	    						i++;
+	    						a[i] = b;
+	    					}		
+	    				}
+	    			}	
+	    		}
+    	return a;
+    }
+    
+    
+    /**
+     * Method to set value for the best play
+     * @param board
+     */
+    private void bestPlay(Board board) {
+    	for (int i = 0; i < ROWS; i++)
+    		for (int j = 0; j < COLUMNS; j++) {
+    			if (!isValidPos(i, j)) {
+    				board.value++;
+    			}
+    		}
+    }
+    
     
     /**
      * provides a string representation of the board current content
