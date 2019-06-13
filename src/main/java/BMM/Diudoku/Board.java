@@ -221,15 +221,15 @@ public class Board {
      * @return the value of a board
      * @throws CloneNotSupportedException 
      */
-    public int minimaxAlfaBeta(Board board, int alfa, int beta, Boolean player) throws CloneNotSupportedException {
+    public int minimaxAlfaBeta(Board board, int alfa, int beta, Boolean player, int deep) throws CloneNotSupportedException {
         bestPlay(board);
-    	if (board.value == 81) 
+    	if (board.value == 81||deep == 3) 
         	return board.value;
     	for (Board b : generateSon(board)) {
     		if (player)
-    			alfa = Math.max(alfa, minimaxAlfaBeta(b, alfa, beta, false));
+    			alfa = Math.max(alfa, minimaxAlfaBeta(b, alfa, beta, false, deep++));
     		else
-    			beta = Math.min(beta, minimaxAlfaBeta(b, alfa, beta, true));
+    			beta = Math.min(beta, minimaxAlfaBeta(b, alfa, beta, true, deep++));
     	} 
         if (player)
         	return alfa;
