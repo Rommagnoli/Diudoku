@@ -12,29 +12,29 @@ public class Board {
     /**
      * Represent the number of the board rows
      */
-    private static final int ROWS = 9;
+    private static final Integer ROWS = 9;
     
     /**
      * Represent the number of the board columns
      */
-    private static final int COLUMNS = 9;
+    private static final Integer COLUMNS = 9;
     
     /**
      * Matrix to represent the board
      */
-    private int [][] board; 
+    private Integer [][] board; 
     
     /**
      * Number represent value of the board
      */
-    private int value = 0;
+    private Integer value = 0;
     /**
      * Constructor of the Board class that make a board of 9x9
      */
     public Board () {
-        this.board = new int[ROWS][COLUMNS];
-        for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < COLUMNS; col++) {
+        this.board = new Integer[ROWS][COLUMNS];
+        for (Integer row = 0; row < ROWS; row++) {
+            for (Integer col = 0; col < COLUMNS; col++) {
                 this.board[row][col] = 0;
             }
         }
@@ -46,7 +46,7 @@ public class Board {
      * @param row is the index of the row of the board to set the value
      * @param col is the index of the column of the board to set the value
      */
-    public void setCell(int value, int row, int col) {
+    public void setCell(Integer value, Integer row, Integer col) {
         if (!(this.isValidPos(row, col))) throw new IllegalArgumentException("Invalid Position");
         if (!(this.isValidNumber(value, row, col))) throw new IllegalArgumentException("This value can't be located here, because it is already in the same row, column or region");
         this.board[row][col] = value;
@@ -58,7 +58,7 @@ public class Board {
      * @param col is the index of the column to verify the position
      * @return true if position is a valid position
      */
-    private boolean isValidPos(int row, int col) {
+    private boolean isValidPos(Integer row, Integer col) {
         if ((row >= 9) || (col >= 9) || (this.board[row][col] != 0)) return false;
         return true;
     }
@@ -71,7 +71,7 @@ public class Board {
      * @param col is the index of the column to verify the position
      * @return true if the value can be located on the position
      */
-    private boolean isValidNumber(int value, int row, int col) {
+    private boolean isValidNumber(Integer value, Integer row, Integer col) {
         if ((this.isValidRow(row, value)) && (this.isValidColumns(col, value)) && (this.isValidRegion(row, col, value))) return true;
         return false;
     }
@@ -82,8 +82,8 @@ public class Board {
      * @param value is the number to set on the board
      * @return true if the number can be located
      */
-    private boolean isValidRow(int row, int value) {
-        for (int colIndex = 0; colIndex < COLUMNS; colIndex++) {
+    private boolean isValidRow(Integer row, Integer value) {
+        for (Integer colIndex = 0; colIndex < COLUMNS; colIndex++) {
             if (this.board[row][colIndex] == value) return false;
         }
         return true;
@@ -95,8 +95,8 @@ public class Board {
      * @param value is the number to set on the board
      * @return true if the number can be located
      */
-    private boolean isValidColumns(int col, int value) {
-        for (int rowIndex = 0; rowIndex < ROWS; rowIndex++) {
+    private boolean isValidColumns(Integer col, Integer value) {
+        for (Integer rowIndex = 0; rowIndex < ROWS; rowIndex++) {
             if (this.board[rowIndex][col] == value) return false;
         }
         return true;
@@ -109,76 +109,76 @@ public class Board {
      * @param value is the number to set in a region 
      * @return true if the value can be located
      */
-    private boolean isValidRegion(int row, int col, int value) {
-        int region = this.determineRegion(row, col);
+    private boolean isValidRegion(Integer row, Integer col, Integer value) {
+        Integer region = this.determineRegion(row, col);
         switch (region) {
             case 1 : 
-                for(int rowIndex = 0; rowIndex < 3; rowIndex++) {
-                    for (int colIndex = 0; colIndex < 3; colIndex++) {
+                for(Integer rowIndex = 0; rowIndex < 3; rowIndex++) {
+                    for (Integer colIndex = 0; colIndex < 3; colIndex++) {
                         if (this.board[rowIndex][colIndex] == value) return false;
                     }
                 }
                 break;
             
             case 2 :
-                for(int rowIndex = 0; rowIndex < 3; rowIndex++) {
-                    for (int colIndex = 3; colIndex < 6; colIndex++) {
+                for(Integer rowIndex = 0; rowIndex < 3; rowIndex++) {
+                    for (Integer colIndex = 3; colIndex < 6; colIndex++) {
                         if (this.board[rowIndex][colIndex] == value) return false;
                     }
                 }
                 break;
             
             case 3 :
-                for(int rowIndex = 0; rowIndex < 3; rowIndex++) {
-                    for (int colIndex = 6; colIndex < 9; colIndex++) {
+                for(Integer rowIndex = 0; rowIndex < 3; rowIndex++) {
+                    for (Integer colIndex = 6; colIndex < 9; colIndex++) {
                         if (this.board[rowIndex][colIndex] == value) return false;
                     }
                 }
                 break;
             
             case 4 :
-                for(int rowIndex = 3; rowIndex < 6; rowIndex++) {
-                    for (int colIndex = 0; colIndex < 3; colIndex++) {
+                for(Integer rowIndex = 3; rowIndex < 6; rowIndex++) {
+                    for (Integer colIndex = 0; colIndex < 3; colIndex++) {
                         if (this.board[rowIndex][colIndex] == value) return false;
                     }
                 }
                 break;
             
             case 5 :
-                for(int rowIndex = 3; rowIndex < 6; rowIndex++) {
-                    for (int colIndex = 3; colIndex < 6; colIndex++) {
+                for(Integer rowIndex = 3; rowIndex < 6; rowIndex++) {
+                    for (Integer colIndex = 3; colIndex < 6; colIndex++) {
                         if (this.board[rowIndex][colIndex] == value) return false;
                     }
                 }
                 break;
             
             case 6 :
-                for(int rowIndex = 3; rowIndex < 6; rowIndex++) {
-                    for (int colIndex = 6; colIndex < 9; colIndex++) {
+                for(Integer rowIndex = 3; rowIndex < 6; rowIndex++) {
+                    for (Integer colIndex = 6; colIndex < 9; colIndex++) {
                         if (this.board[rowIndex][colIndex] == value) return false;
                     }
                 }
                 break;
             
             case 7 :
-                for(int rowIndex = 6; rowIndex < 9; rowIndex++) {
-                    for (int colIndex = 0; colIndex < 3; colIndex++) {
+                for(Integer rowIndex = 6; rowIndex < 9; rowIndex++) {
+                    for (Integer colIndex = 0; colIndex < 3; colIndex++) {
                         if (this.board[rowIndex][colIndex] == value) return false;
                     }
                 }
                 break;
             
             case 8 :
-                for(int rowIndex = 6; rowIndex < 9; rowIndex++) {
-                    for (int colIndex = 3; colIndex < 6; colIndex++) {
+                for(Integer rowIndex = 6; rowIndex < 9; rowIndex++) {
+                    for (Integer colIndex = 3; colIndex < 6; colIndex++) {
                         if (this.board[rowIndex][colIndex] == value) return false;
                     }
                 }
                 break;
             
             case 9 :
-                for(int rowIndex = 6; rowIndex < 9; rowIndex++) {
-                    for (int colIndex = 6; colIndex < 9; colIndex++) {
+                for(Integer rowIndex = 6; rowIndex < 9; rowIndex++) {
+                    for (Integer colIndex = 6; colIndex < 9; colIndex++) {
                         if (this.board[rowIndex][colIndex] == value) return false;
                     }
                 }
@@ -193,8 +193,8 @@ public class Board {
      * @param col is the index of the column on the board
      * @return the number of the region to a specify position
      */
-    private int determineRegion(int row, int col) {
-        int region = 0;
+    private Integer determineRegion(Integer row, Integer col) {
+        Integer region = 0;
         if (row <= 2) {
             if (col <= 2) region = 1;
             if ((col >= 3) && (col <= 5)) region = 2;
@@ -221,7 +221,7 @@ public class Board {
      * @return the value of a board
      * @throws CloneNotSupportedException 
      */
-    public int minimaxAlfaBeta(Board board, int alfa, int beta, Boolean player, int deep) throws CloneNotSupportedException {
+    public Integer minimaxAlfaBeta(Board board, Integer alfa, Integer beta, Boolean player, Integer deep) throws CloneNotSupportedException {
         bestPlay(board);
     	if (board.value == 81||deep == 3) 
         	return board.value;
@@ -245,19 +245,19 @@ public class Board {
      */
     private Board[] generateSon(Board board) throws CloneNotSupportedException {
     	Board[] a = new Board[10];
-    	int i = -1;
-	    		for (int j = 0; j < ROWS; j++) {
-	    			for (int k = 0; k < COLUMNS; k++) {
-	    				for (int m = 1; m <= 9; m++) {
-	    					if (board.isValidNumber(m, j, k)) {
-	    						Board b = (Board) board.clone();
-	    						b.setCell(m, j, j);
-	    						i++;
-	    						a[i] = b;
-	    					}		
-	    				}
-	    			}	
-	    		}
+    	Integer i = -1;
+    		for (Integer j = 0; j < ROWS; j++) {
+    			for (Integer k = 0; k < COLUMNS; k++) {
+    				for (Integer m = 1; m <= 9; m++) {
+    					if (board.isValidNumber(m, j, k)) {
+    						Board b = (Board) board.clone();
+    						b.setCell(m, j, j);
+    						i++;
+    						a[i] = b;
+    					}		
+    				}
+    			}	
+    		}
     	return a;
     }
     
@@ -267,8 +267,8 @@ public class Board {
      * @param board
      */
     private void bestPlay(Board board) {
-    	for (int i = 0; i < ROWS; i++)
-    		for (int j = 0; j < COLUMNS; j++) {
+    	for (Integer i = 0; i < ROWS; i++)
+    		for (Integer j = 0; j < COLUMNS; j++) {
     			if (!isValidPos(i, j)) {
     				board.value++;
     			}
@@ -280,8 +280,21 @@ public class Board {
      * provides a string representation of the board current content
      * @return a string that show the board
      */
-    public String toString() {
-        //TODO Implement this method
-        return "";
-    }
+	@Override
+	public String toString() {
+		String s = "";
+		String contentCell = "";
+		for (Integer row = 0; row < ROWS; row++) {
+			s = s + "|";
+			for (Integer col = 0; col < COLUMNS; col++) {
+				contentCell = this.board[row][col].toString();
+				for (Integer b = contentCell.length(); b < 4; b++) {
+					s = s + " ";
+				}
+				s = s + contentCell + "|";
+			}
+			s = s + "\n";
+		}
+		return s;
+	}
 }
