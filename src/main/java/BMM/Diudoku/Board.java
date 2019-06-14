@@ -8,22 +8,22 @@ package BMM.Diudoku;
  *
  */
 public class Board {
-    
+
     /**
      * Represent the number of the board rows
      */
     private static final Integer ROWS = 9;
-    
+
     /**
      * Represent the number of the board columns
      */
     private static final Integer COLUMNS = 9;
-    
+
     /**
      * Matrix to represent the board
      */
-    private Integer [][] board; 
-    
+    private Integer [][] board;
+
     /**
      * Number represent value of the board
      */
@@ -39,10 +39,10 @@ public class Board {
             }
         }
     }
-    
+
     /**
      * Set a value in a specific cell of the board
-     * @param value is the number to set in the specific position 
+     * @param value is the number to set in the specific position
      * @param row is the index of the row of the board to set the value
      * @param col is the index of the column of the board to set the value
      */
@@ -51,7 +51,7 @@ public class Board {
         if (!(this.isValidNumber(value, row, col))) throw new IllegalArgumentException("This value can't be located here, because it is already in the same row, column or region");
         this.board[row][col] = value;
     }
-    
+
     /**
      * Determine if a specific position is valid to be occupied
      * @param row is the index of the row to verify the position
@@ -62,7 +62,7 @@ public class Board {
         if ((row >= 9) || (col >= 9) || (this.board[row][col] != 0)) return false;
         return true;
     }
-    
+
     /**
      * Determine if a value can be located on the position, according to the
      * sudoku's rulers
@@ -75,7 +75,7 @@ public class Board {
         if ((this.isValidRow(row, value)) && (this.isValidColumns(col, value)) && (this.isValidRegion(row, col, value))) return true;
         return false;
     }
-    
+
     /**
      * Determine if a value can be located in a row, according to the sudoku's rulers
      * @param row is the index to verify the row
@@ -88,7 +88,7 @@ public class Board {
         }
         return true;
     }
-    
+
     /**
      * Determine if a value can be located in a column, according to the sudoku's rulers
      * @param col is the index to verify the column
@@ -101,25 +101,25 @@ public class Board {
         }
         return true;
     }
-    
+
     /**
      * Determine if a value can be located in a 3x3 region, according to the sudoku's rulers
-     * @param row is the index of row to verify the region 
+     * @param row is the index of row to verify the region
      * @param col is the index of column to verify the region
-     * @param value is the number to set in a region 
+     * @param value is the number to set in a region
      * @return true if the value can be located
      */
     private boolean isValidRegion(Integer row, Integer col, Integer value) {
         Integer region = this.determineRegion(row, col);
         switch (region) {
-            case 1 : 
+            case 1 :
                 for(Integer rowIndex = 0; rowIndex < 3; rowIndex++) {
                     for (Integer colIndex = 0; colIndex < 3; colIndex++) {
                         if (this.board[rowIndex][colIndex] == value) return false;
                     }
                 }
                 break;
-            
+
             case 2 :
                 for(Integer rowIndex = 0; rowIndex < 3; rowIndex++) {
                     for (Integer colIndex = 3; colIndex < 6; colIndex++) {
@@ -127,7 +127,7 @@ public class Board {
                     }
                 }
                 break;
-            
+
             case 3 :
                 for(Integer rowIndex = 0; rowIndex < 3; rowIndex++) {
                     for (Integer colIndex = 6; colIndex < 9; colIndex++) {
@@ -135,7 +135,7 @@ public class Board {
                     }
                 }
                 break;
-            
+
             case 4 :
                 for(Integer rowIndex = 3; rowIndex < 6; rowIndex++) {
                     for (Integer colIndex = 0; colIndex < 3; colIndex++) {
@@ -143,7 +143,7 @@ public class Board {
                     }
                 }
                 break;
-            
+
             case 5 :
                 for(Integer rowIndex = 3; rowIndex < 6; rowIndex++) {
                     for (Integer colIndex = 3; colIndex < 6; colIndex++) {
@@ -151,7 +151,7 @@ public class Board {
                     }
                 }
                 break;
-            
+
             case 6 :
                 for(Integer rowIndex = 3; rowIndex < 6; rowIndex++) {
                     for (Integer colIndex = 6; colIndex < 9; colIndex++) {
@@ -159,7 +159,7 @@ public class Board {
                     }
                 }
                 break;
-            
+
             case 7 :
                 for(Integer rowIndex = 6; rowIndex < 9; rowIndex++) {
                     for (Integer colIndex = 0; colIndex < 3; colIndex++) {
@@ -167,7 +167,7 @@ public class Board {
                     }
                 }
                 break;
-            
+
             case 8 :
                 for(Integer rowIndex = 6; rowIndex < 9; rowIndex++) {
                     for (Integer colIndex = 3; colIndex < 6; colIndex++) {
@@ -175,7 +175,7 @@ public class Board {
                     }
                 }
                 break;
-            
+
             case 9 :
                 for(Integer rowIndex = 6; rowIndex < 9; rowIndex++) {
                     for (Integer colIndex = 6; colIndex < 9; colIndex++) {
@@ -186,7 +186,7 @@ public class Board {
         }
         return true;
     }
-    
+
     /**
      * Determine the region on the board for a specify position
      * @param row is the index of the row on the board
@@ -212,26 +212,25 @@ public class Board {
         }
         return region;
     }
-    
+
     /**
      * Mathod to set a valor for a board based on the minimax algorithm whit alpha-beta pruning
      * @param board is the board to value
-     * @param alfa 
+     * @param alfa
      * @param beta
      * @return the value of a board
-     * @throws CloneNotSupportedException 
      */
-    public Integer minimaxAlfaBeta(Board board, Integer alfa, Integer beta, Boolean player, Integer deep) throws CloneNotSupportedException {
+    public Integer minimaxAlfaBeta(Board board, Integer alfa, Integer beta, Boolean player, Integer deep) {
         bestPlay(board);
-    	if (board.value == 81||deep == 3) 
+    	if (board.value == 81||deep == 3)
         	return board.value;
-    	
+
     	Board finalBoard = null;
     	for (Board b : generateSon(board)) {
     		if (player) {
     			int v = minimaxAlfaBeta(b, alfa, beta, false, deep++);
     			if (alfa < v);
-    				alfa = v;	
+    				alfa = v;
     			finalBoard = b;
     		}else
     			beta = Math.min(beta, minimaxAlfaBeta(b, alfa, beta, true, deep++));
@@ -243,32 +242,41 @@ public class Board {
         else
         	return beta;
     }
-    
+
     /**
      * Method to build the sons of the board
      * @param board
      * @return son of the board
-     * @throws CloneNotSupportedException
      */
-    private Board[] generateSon(Board board) throws CloneNotSupportedException {
+    private Board[] generateSon(Board board) {
     	Board[] a = new Board[10];
     	Integer i = -1;
     		for (Integer j = 0; j < ROWS; j++) {
     			for (Integer k = 0; k < COLUMNS; k++) {
     				for (Integer m = 1; m <= 9; m++) {
     					if (board.isValidNumber(m, j, k)) {
-    						Board b = (Board) board.clone();
+    						Board b = (Board) board.cloneBoard();
     						b.setCell(m, j, j);
     						i++;
     						a[i] = b;
-    					}		
+    					}
     				}
-    			}	
+    			}
     		}
     	return a;
     }
-    
-    
+
+    private Board cloneBoard(){
+        Board clone = new Board();
+        for (int i = 0; i < ROWS; i++){
+            for (int j = 0; j < COLUMNS; j++){
+                clone.setCell(this.board[i][j], i, j);
+            }
+        }
+        return clone;
+    }
+
+
     /**
      * Method to set value for the best play
      * @param board
@@ -289,16 +297,16 @@ public class Board {
     	for (int i = 0; i < ROWS; i++) {
     		for (int j = 0; j < COLUMNS; j++) {
     			if (this.isValidPos(i, j)) {
-    				for (int k = 1;k <=9; k++) {	
+    				for (int k = 1;k <=9; k++) {
     					if (this.isValidNumber(k, i, j))
     						return false;
     				}
-    			}	
+    			}
     		}
     	}
     	return true;
     }
-    
+
     /**
      * provides a string representation of the board current content
      * @return a string that show the board
