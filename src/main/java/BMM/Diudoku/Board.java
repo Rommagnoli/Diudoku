@@ -71,7 +71,7 @@ public class Board {
      * @param col is the index of the column to verify the position
      * @return true if the value can be located on the position
      */
-    private boolean isValidNumber(Integer value, Integer row, Integer col) {
+    public boolean isValidNumber(Integer value, Integer row, Integer col) {
         if ((this.isValidRow(row, value)) && (this.isValidColumns(col, value)) && (this.isValidRegion(row, col, value))) return true;
         return false;
     }
@@ -225,12 +225,19 @@ public class Board {
         bestPlay(board);
     	if (board.value == 81||deep == 3) 
         	return board.value;
+    	
+    	Board finalBoard = null;
     	for (Board b : generateSon(board)) {
-    		if (player)
-    			alfa = Math.max(alfa, minimaxAlfaBeta(b, alfa, beta, false, deep++));
-    		else
+    		if (player) {
+    			int v = minimaxAlfaBeta(b, alfa, beta, false, deep++);
+    			if (alfa < v);
+    				alfa = v;	
+    			finalBoard = b;
+    		}else
     			beta = Math.min(beta, minimaxAlfaBeta(b, alfa, beta, true, deep++));
-    	} 
+    	}
+    	if (finalBoard != null)
+    		this.board = finalBoard.board;
         if (player)
         	return alfa;
         else
@@ -274,7 +281,23 @@ public class Board {
     			}
     		}
     }
-    
+    /**
+     * See if a borad is complete.
+     * @return true is a board is complete.
+     */
+    public Boolean completeBoard() {
+    	for (int i = 0; i < ROWS; i++) {
+    		for (int j = 0; j < COLUMNS; j++) {
+    			if (this.isValidPos(i, j)) {
+    				for (int k = 1;k <=9; k++) {	
+    					if (this.isValidNumber(k, i, j))
+    						return false;
+    				}
+    			}	
+    		}
+    	}
+    	return true;
+    }
     
     /**
      * provides a string representation of the board current content
