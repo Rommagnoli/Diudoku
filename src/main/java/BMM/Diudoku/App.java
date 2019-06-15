@@ -47,7 +47,7 @@ public class App
     				while (!(boardGame.completeBoard())) {
     					if (turn == false) {
     						do {
-    							boardGame.toString();
+    							System.out.println(boardGame.toString());
         						System.out.println("Ingrese el valor a colocar y su respectiva posicion");
         						System.out.println("Ingresar valor:");
         						value = scann.nextInt();
@@ -60,7 +60,7 @@ public class App
 							boardGame.setCell(value, row, column);
 							turn = true;
     					}else{
-							boardGame.minimaxAlfaBeta(boardGame, alfa, beta, turn, deep);
+							boardGame.minimaxAlfaBeta(boardGame, alfa, beta, turn, 1);
 							turn = false;
 						}
     				}

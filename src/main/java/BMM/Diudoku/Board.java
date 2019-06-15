@@ -27,7 +27,7 @@ public class Board {
     /**
      * Number represent value of the board
      */
-    private Integer value = 0;
+    private Integer value;
     /**
      * Constructor of the Board class that make a board of 9x9
      */
@@ -38,6 +38,7 @@ public class Board {
                 this.board[row][col] = 0;
             }
         }
+        this.value = 0;
     }
 
     /**
@@ -225,12 +226,12 @@ public class Board {
      */
     public Integer minimaxAlfaBeta(Board board, Integer alfa, Integer beta, Boolean player, Integer deep) {
         bestPlay(board);
-    	if (board.value == 81||deep == 3)
+        System.out.println(board.value);
+    	if ((board.value == 81) || (deep == 3))
         	return board.value;
 
     	Board finalBoard = null;
     	for (Board b : generateSon(board)) {
-    	  System.out.println(b.toString());
     		if (player) {
     			int v = minimaxAlfaBeta(b, alfa, beta, false, deep++);
     			if (alfa < v);
@@ -262,7 +263,6 @@ public class Board {
     					if ((board.isValidNumber(num, row, column)) && (board.board[row][column] == 0) && (sonsCount != 10)) {
     						Board newboard = board.cloneBoard();
     						newboard.setCell(num, row, column);
-    						System.out.println(newboard.toString());
     						sons[sonsCount] = newboard;
     						sonsCount++;
     					} 
@@ -289,12 +289,20 @@ public class Board {
      * @param board
      */
     private void bestPlay(Board board) {
-    	for (Integer i = 0; i < ROWS; i++)
+    	for (Integer i = 0; i < ROWS; i++) {
     		for (Integer j = 0; j < COLUMNS; j++) {
     			if (!board.isValidPos(i, j)) {
     				board.value++;
+    			} else {
+    				int k = 1;
+    				while((k <= 9)) {
+    					if ((!this.isValidNumber(k, i, j)) && (k == 9))
+							board.value++;
+						k++;	
+					}
     			}
     		}
+    	}	
     }
     /**
      * See if a borad is complete.
