@@ -253,23 +253,23 @@ public class Board {
      * @return son of the board
      */
     private Board[] generateSon(Board board) {
-    	Board[] a = new Board[10];
-    	Integer i = 0;
-    		for (Integer j = 0; j < ROWS; j++) {
-    			for (Integer k = 0; k < COLUMNS; k++) {
-    				for (Integer m = 1; m <= 9; m++) {
-    				  //LIMITAR CANTIDAD DE HIJOS
-    					if ((board.isValidNumber(m, j, k)) && (board.board[j][k] == 0)) {
-    						Board b = board.cloneBoard();
-    						b.setCell(m, j, k);
-    						System.out.println(b.toString());
-    						a[i] = b;
-    						i++;
+    	Board[] sons = new Board[10];
+    	Integer sonsCount = 0;
+    		for (Integer row = 0; row < ROWS; row++) {
+    			for (Integer column = 0; column < COLUMNS; column++) {
+    				for (Integer num = 1; num <= 9; num++) {
+    				  
+    					if ((board.isValidNumber(num, row, column)) && (board.board[row][column] == 0) && (sonsCount != 10)) {
+    						Board newboard = board.cloneBoard();
+    						newboard.setCell(num, row, column);
+    						System.out.println(newboard.toString());
+    						sons[sonsCount] = newboard;
+    						sonsCount++;
     					} 
     				}
     			}
     		}
-    	return a;
+    	return sons;
     }
 
     private Board cloneBoard(){
