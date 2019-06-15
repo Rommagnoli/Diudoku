@@ -47,8 +47,10 @@ public class Board {
      * @param col is the index of the column of the board to set the value
      */
     public void setCell(Integer value, Integer row, Integer col) {
-        if (!(this.isValidPos(row, col))) throw new IllegalArgumentException("Invalid Position");
-        if (!(this.isValidNumber(value, row, col))) throw new IllegalArgumentException("This value can't be located here, because it is already in the same row, column or region");
+        if ((this.isValidPos(row, col) == false )) 
+          throw new IllegalArgumentException("Invalid Position");
+        if ((this.isValidNumber(value, row, col) == false)) 
+          throw new IllegalArgumentException("This value can't be located here, because it is already in the same row, column or region");
         this.board[row][col] = value;
     }
 
@@ -59,7 +61,7 @@ public class Board {
      * @return true if position is a valid position
      */
     private boolean isValidPos(Integer row, Integer col) {
-        if ((row >= 9) || (col >= 9) || (this.board[row][col] != 0)) return false;
+        if ((row > ROWS) || (col > COLUMNS) || (this.board[row][col] != 0)) return false;
         return true;
     }
 
@@ -72,7 +74,8 @@ public class Board {
      * @return true if the value can be located on the position
      */
     public boolean isValidNumber(Integer value, Integer row, Integer col) {
-        if ((this.isValidRow(row, value)) && (this.isValidColumns(col, value)) && (this.isValidRegion(row, col, value))) return true;
+        if (((value <= 9) || (value >= 1)) && (this.isValidRow(row, value)) && (this.isValidColumns(col, value)) && (this.isValidRegion(row, col, value))) 
+          return true;
         return false;
     }
 
@@ -227,6 +230,7 @@ public class Board {
 
     	Board finalBoard = null;
     	for (Board b : generateSon(board)) {
+    	  System.out.println(b.toString());
     		if (player) {
     			int v = minimaxAlfaBeta(b, alfa, beta, false, deep++);
     			if (alfa < v);
@@ -250,16 +254,18 @@ public class Board {
      */
     private Board[] generateSon(Board board) {
     	Board[] a = new Board[10];
-    	Integer i = -1;
+    	Integer i = 0;
     		for (Integer j = 0; j < ROWS; j++) {
     			for (Integer k = 0; k < COLUMNS; k++) {
     				for (Integer m = 1; m <= 9; m++) {
-    					if (board.isValidNumber(m, j, k)) {
-    						Board b = (Board) board.cloneBoard();
-    						b.setCell(m, j, j);
-    						i++;
+    				  //LIMITAR CANTIDAD DE HIJOS
+    					if ((board.isValidNumber(m, j, k)) && (board.board[j][k] == 0)) {
+    						Board b = board.cloneBoard();
+    						b.setCell(m, j, k);
+    						System.out.println(b.toString());
     						a[i] = b;
-    					}
+    						i++;
+    					} 
     				}
     			}
     		}
@@ -270,6 +276,7 @@ public class Board {
         Board clone = new Board();
         for (int i = 0; i < ROWS; i++){
             for (int j = 0; j < COLUMNS; j++){
+              if (this.board[i][j] != 0)
                 clone.setCell(this.board[i][j], i, j);
             }
         }
@@ -284,7 +291,7 @@ public class Board {
     private void bestPlay(Board board) {
     	for (Integer i = 0; i < ROWS; i++)
     		for (Integer j = 0; j < COLUMNS; j++) {
-    			if (!isValidPos(i, j)) {
+    			if (!board.isValidPos(i, j)) {
     				board.value++;
     			}
     		}
