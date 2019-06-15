@@ -39,7 +39,6 @@ public class App {
                     int column;
                     int alfa = MIN_VALUE;
                     int beta = MAX_VALUE;
-                    int deep = 1;
                     Board boardGame = new Board();
                     Boolean turn = false;
                     while (!(boardGame.completeBoard())) {

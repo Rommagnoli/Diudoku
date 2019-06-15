@@ -1,5 +1,7 @@
 package BMM.Diudoku;
 
+import java.util.ArrayList;
+
 /**
  * This class represent the board of the game
  *
@@ -84,10 +86,7 @@ public class Board {
      * @return true if the value can be located on the position
      */
     public boolean isValidNumber(Integer value, Integer row, Integer col) {
-        if (((value <= 9) || (value >= 1)) && (this.isValidRow(row, value)) && (this.isValidColumns(col, value)) && (this.isValidRegion(row, col, value))) {
-            return true;
-        }
-        return false;
+        return (((value <= 9) && (value >= 1)) && (this.isValidRow(row, value)) && (this.isValidColumns(col, value)) && (this.isValidRegion(row, col, value)));
     }
 
     /**
@@ -284,13 +283,11 @@ public class Board {
      * @return the value of a board
      */
     public Integer minimaxAlfaBeta(Board board, Integer alfa, Integer beta, Boolean player, Integer deep) {
-        bestPlay(board);
-        System.out.println(board.toString());
-        System.out.println(board.value);
-        if ((board.value == 81) || (deep == 3)) {
+    	bestPlay(board);
+        if ((board.value.equals(81)) || (deep.equals(3))) {
             return board.value;
         }
-
+      
         Board finalBoard = null;
         for (Board b : generateSon(board)) {
             if (player) {
@@ -318,17 +315,17 @@ public class Board {
      * @param board
      * @return son of the board
      */
-    private Board[] generateSon(Board board) {
-        Board[] sons = new Board[10];
+    private ArrayList<Board> generateSon(Board board) {
+    	ArrayList<Board> sons = new ArrayList<Board>();
         Integer sonsCount = 0;
         for (Integer row = 0; row < ROWS; row++) {
             for (Integer column = 0; column < COLUMNS; column++) {
                 for (Integer num = 1; num <= 9; num++) {
 
-                    if ((board.isValidNumber(num, row, column)) && (board.board[row][column] == 0) && (sonsCount != 10)) {
+                    if ((board.isValidNumber(num, row, column)) && (board.board[row][column].equals(0)) && (sonsCount < 2)) {
                         Board newboard = board.cloneBoard();
                         newboard.setCell(num, row, column);
-                        sons[sonsCount] = newboard;
+                        sons.add(newboard);
                         sonsCount++;
                     }
                 }
@@ -361,7 +358,7 @@ public class Board {
                     board.value++;
                 } else {
                     int k = 1;
-                    while ((k <= 9) && (!this.isValidNumber(k, i, j))) {
+                    while ((k <= 9) && (!board.isValidNumber(k, i, j))) {
                         if (k == 9) {
                             board.value++;
                         }
