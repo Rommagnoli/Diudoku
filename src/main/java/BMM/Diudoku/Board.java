@@ -86,6 +86,8 @@ public class Board {
      * @return true if the value can be located on the position
      */
     public boolean isValidNumber(Integer value, Integer row, Integer col) {
+        if (value > 9 || value < 1)
+            return false;
         return (((value <= 9) && (value >= 1)) && (this.isValidRow(row, value)) && (this.isValidColumns(col, value)) && (this.isValidRegion(row, col, value)));
     }
 
@@ -98,6 +100,8 @@ public class Board {
      * @return true if the number can be located
      */
     private boolean isValidRow(Integer row, Integer value) {
+        if (row >= 9 || row < 0)
+            return false;
         for (Integer colIndex = 0; colIndex < COLUMNS; colIndex++) {
             if (this.board[row][colIndex].equals(value)) {
                 return false;
@@ -115,6 +119,8 @@ public class Board {
      * @return true if the number can be located
      */
     private boolean isValidColumns(Integer col, Integer value) {
+        if (col >= 9 || col < 0)
+            return false;
         for (Integer rowIndex = 0; rowIndex < ROWS; rowIndex++) {
             if (this.board[rowIndex][col].equals(value)) {
                 return false;

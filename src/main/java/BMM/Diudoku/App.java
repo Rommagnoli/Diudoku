@@ -34,27 +34,30 @@ public class App {
             }
             switch (opcion) {
                 case 1:
-                    int value;
-                    int row;
-                    int column;
+                    int value = 1;
+                    int row = 0;
+                    int column = 0;
                     int alfa = MIN_VALUE;
                     int beta = MAX_VALUE;
                     Board boardGame = new Board();
+                    Boolean validInfo = false;
                     Boolean turn = false;
                     while (!(boardGame.completeBoard())) {
                         if (turn == false) {
-                            do {
-                                System.out.println(boardGame.toString());
-                                System.out.println("Ingrese el valor a colocar y su respectiva posicion");
-                                System.out.println("Ingresar valor:");
-                                value = scann.nextInt();
-                                System.out.println("Ingresar posiciones");
-                                System.out.println("Row: ");
-                                row = scann.nextInt();
-                                System.out.println("Column: ");
-                                column = scann.nextInt();
-                            } while (!(boardGame.isValidNumber(value, row, column)));
-                            boardGame.setCell(value, row, column);
+                                do {
+                                    System.out.println(boardGame.toString());
+                                    System.out.println("Ingrese el valor a colocar y su respectiva posicion");
+                                    System.out.println("Ingresar valor:");
+                                    value = scann.nextInt();
+                                    System.out.println("Ingresar posiciones");
+                                    System.out.println("Row: ");
+                                    row = scann.nextInt();
+                                    System.out.println("Column: ");
+                                    column = scann.nextInt();
+                                    if (!boardGame.isValidNumber(value, row, column))
+                                        System.out.println("Invalid position, try again");
+                                } while (!(boardGame.isValidNumber(value, row, column)));
+                                boardGame.setCell(value, row, column);
                             turn = true;
                         } else {
                             boardGame.minimaxAlfaBeta(boardGame, alfa, beta, turn, 1);
