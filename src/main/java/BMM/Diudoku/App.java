@@ -63,7 +63,7 @@ public class App {
                                 boardGame.setCell(value, row, column);
                             turn = true;
                         } else {
-                            if (cont > 5) {         //Valor de la cantidad de jugadas random al inicio del juego
+                            if (cont > 20) {         //Valor de la cantidad de jugadas random al inicio del juego
                               boardGame.minimaxAlfaBeta(boardGame, alfa, beta, turn, 1);
                               turn = false;
                             } else {

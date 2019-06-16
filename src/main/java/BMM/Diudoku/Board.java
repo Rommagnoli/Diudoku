@@ -57,7 +57,7 @@ public class Board {
             throw new IllegalArgumentException("Invalid Position");
         }
         if ((this.isValidNumber(value, row, col) == false)) {
-            throw new IllegalArgumentException("This value can't be located here, because it is already in the same row, column or region");
+            throw new IllegalArgumentException("This value can't be located here, because it is already in the same row, column, region or the value is out of range");
         }
         this.board[row][col] = value;
     }
@@ -284,22 +284,21 @@ public class Board {
      * @return the value of a board
      */
     public Integer minimaxAlfaBeta(Board board, Integer alfa, Integer beta, Boolean player, Integer deep) {
-    	bestPlay(board);
-    	System.out.println(deep);
+    	bestPlay(board);    	
         if ((board.value.equals(81)) || (deep > 3 )) {
             return board.value;
         }
-      
+        deep++;
         Board finalBoard = null;
         for (Board b : generateSon(board)) {
             if (player) {
-                int v = minimaxAlfaBeta(b, alfa, beta, false, deep++);
+                int v = minimaxAlfaBeta(b, alfa, beta, false, deep);
                 if (alfa < v) {
                   alfa = v;
                   finalBoard = b;
                 }
             } else {
-                beta = Math.min(beta, minimaxAlfaBeta(b, alfa, beta, true, deep++));
+                beta = Math.min(beta, minimaxAlfaBeta(b, alfa, beta, true, deep));
             }
         }
         if (finalBoard != null) {
@@ -323,7 +322,7 @@ public class Board {
         for (Integer row = 0; row < ROWS; row++) {
             for (Integer column = 0; column < COLUMNS; column++) {
                 for (Integer num = 1; num <= 9; num++) {
-                    if ((board.isValidNumber(num, row, column)) && (board.board[row][column].equals(0)) && (sons.size() < 3)) {
+                    if ((board.isValidNumber(num, row, column)) && (board.board[row][column].equals(0)) && (sons.size() < 75)) {
                         Board newboard = board.cloneBoard();
                         newboard.setCell(num, row, column);
                         sons.add(newboard);
@@ -387,6 +386,10 @@ public class Board {
             }
         }
         return true;
+    }
+    
+    public Integer[][] getBoard() {
+    	return this.board;
     }
 
     /**
