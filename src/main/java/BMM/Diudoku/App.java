@@ -1,6 +1,8 @@
 package BMM.Diudoku;
 
 import java.util.*;
+import java.util.stream.IntStream;
+import java.math.*;
 
 /**
  * Hello world!
@@ -16,12 +18,10 @@ public class App {
         System.out.println("| 2     SALIR DE LA APP           |");
         System.out.println("|_________________________________|");
     }
-
     private static final int MAX_VALUE = Integer.MAX_VALUE;
     private static final int MIN_VALUE = Integer.MIN_VALUE;
 
     public static void main(String[] args) {
-
         Scanner scann = new Scanner(System.in);
         int opcion = 1;
         while (opcion != 2) {
@@ -40,9 +40,11 @@ public class App {
                     int alfa = MIN_VALUE;
                     int beta = MAX_VALUE;
                     Board boardGame = new Board();
-                    Boolean validInfo = false;
+                    Boolean validPlay = false;
                     Boolean turn = false;
+                    int cont = 0;
                     while (!(boardGame.completeBoard())) {
+                        cont++;
                         if (turn == false) {
                                 do {
                                     System.out.println(boardGame.toString());
@@ -54,14 +56,31 @@ public class App {
                                     row = scann.nextInt();
                                     System.out.println("Column: ");
                                     column = scann.nextInt();
-                                    if (!boardGame.isValidNumber(value, row, column))
+                                    validPlay = (!boardGame.isValidNumber(value, row, column) || (!boardGame.isValidPos(row, column)));
+                                    if (validPlay)
                                         System.out.println("Invalid position, try again");
-                                } while (!(boardGame.isValidNumber(value, row, column)));
+                                } while (validPlay);
                                 boardGame.setCell(value, row, column);
                             turn = true;
                         } else {
-                            boardGame.minimaxAlfaBeta(boardGame, alfa, beta, turn, 1);
-                            turn = false;
+                            if (cont > 5) {         //Valor de la cantidad de jugadas random al inicio del juego
+                              boardGame.minimaxAlfaBeta(boardGame, alfa, beta, turn, 1);
+                              turn = false;
+                            } else {
+                              int value1, row1, col1;
+                              Random r = new Random();
+                              value1 = r.ints(1, 10).findFirst().getAsInt();
+                              row1 = r.ints(0, 9).findFirst().getAsInt();
+                              col1 = r.ints(0, 9).findFirst().getAsInt();
+                              while (!boardGame.isValidNumber(value1, row1, col1) || (!boardGame.isValidPos(row1, col1))) {
+                                value1 = r.ints(1, 10).findFirst().getAsInt();
+                                row1 = r.ints(0, 9).findFirst().getAsInt();
+                                col1 = r.ints(0, 9).findFirst().getAsInt();                              
+                              } 
+                                System.out.println("Row: " + row1 + "Column: " + col1);
+                                boardGame.setCell(value1, row1, col1);
+                              turn = false;
+                            }
                         }
                     }
                     if (turn) {

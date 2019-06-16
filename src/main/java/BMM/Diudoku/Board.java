@@ -69,11 +69,8 @@ public class Board {
      * @param col is the index of the column to verify the position
      * @return true if position is a valid position
      */
-    private boolean isValidPos(Integer row, Integer col) {
-        if ((row > ROWS) || (col > COLUMNS) || (this.board[row][col] != 0)) {
-            return false;
-        }
-        return true;
+    public boolean isValidPos(Integer row, Integer col) {
+        return !((row > ROWS) || (col > COLUMNS) || (this.board[row][col] != 0));
     }
 
     /**
@@ -86,9 +83,7 @@ public class Board {
      * @return true if the value can be located on the position
      */
     public boolean isValidNumber(Integer value, Integer row, Integer col) {
-        if (value > 9 || value < 1)
-            return false;
-        return (((value <= 9) && (value >= 1)) && (this.isValidRow(row, value)) && (this.isValidColumns(col, value)) && (this.isValidRegion(row, col, value)));
+      return (((value <= 9) && (value >= 1)) && (this.isValidRow(row, value)) && (this.isValidColumns(col, value)) && (this.isValidRegion(row, col, value)));
     }
 
     /**
@@ -290,7 +285,8 @@ public class Board {
      */
     public Integer minimaxAlfaBeta(Board board, Integer alfa, Integer beta, Boolean player, Integer deep) {
     	bestPlay(board);
-        if ((board.value.equals(81)) || (deep.equals(3))) {
+    	System.out.println(deep);
+        if ((board.value.equals(81)) || (deep > 3 )) {
             return board.value;
         }
       
@@ -298,9 +294,10 @@ public class Board {
         for (Board b : generateSon(board)) {
             if (player) {
                 int v = minimaxAlfaBeta(b, alfa, beta, false, deep++);
-                if (alfa < v);
-                alfa = v;
-                finalBoard = b;
+                if (alfa < v) {
+                  alfa = v;
+                  finalBoard = b;
+                }
             } else {
                 beta = Math.min(beta, minimaxAlfaBeta(b, alfa, beta, true, deep++));
             }
@@ -323,16 +320,13 @@ public class Board {
      */
     private ArrayList<Board> generateSon(Board board) {
     	ArrayList<Board> sons = new ArrayList<Board>();
-        Integer sonsCount = 0;
         for (Integer row = 0; row < ROWS; row++) {
             for (Integer column = 0; column < COLUMNS; column++) {
                 for (Integer num = 1; num <= 9; num++) {
-
-                    if ((board.isValidNumber(num, row, column)) && (board.board[row][column].equals(0)) && (sonsCount < 2)) {
+                    if ((board.isValidNumber(num, row, column)) && (board.board[row][column].equals(0)) && (sons.size() < 3)) {
                         Board newboard = board.cloneBoard();
                         newboard.setCell(num, row, column);
                         sons.add(newboard);
-                        sonsCount++;
                     }
                 }
             }
@@ -411,9 +405,11 @@ public class Board {
                 for (Integer b = contentCell.length(); b < 4; b++) {
                     s = s + " ";
                 }
-                s = s + contentCell + "|";
+                s = s + contentCell + "";
+                if (col == 2 || col == 5) s = s + "|";
             }
-            s = s + "\n";
+            s = s + "|\n";
+            if (row == 2 || row == 5) s = s + "----------------------------------------\n";
         }
         return s;
     }
