@@ -1,6 +1,7 @@
 package BMM.Diudoku;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * This class represent the board of the game
@@ -284,18 +285,31 @@ public class Board {
      * @return the value of a board
      */
     public Integer minimaxAlfaBeta(Board board, Integer alfa, Integer beta, Boolean player, Integer deep) {
-    	bestPlay(board);    	
-        if ((board.value.equals(81)) || (deep > 3 )) {
+    	bestPlay(board);
+    	Boolean hardDeep = false;
+    	if (deep == 1) {
+    		hardDeep = true;
+    	}
+        if ((board.value.equals((board.board.length*board.board.length)+1)) || (deep > 3 )) {
             return board.value;
         }
         deep++;
         Board finalBoard = null;
-        for (Board b : generateSon(board)) {
+        ArrayList<Board> allBoards = generateSon(board);
+        for (Board b : allBoards) {
             if (player) {
                 int v = minimaxAlfaBeta(b, alfa, beta, false, deep);
                 if (alfa < v) {
                   alfa = v;
-                  finalBoard = b;
+                  if (!hardDeep) {
+                	  int theChosenOne;
+                	  int top = allBoards.size();
+                	  Random r = new Random();
+                	  theChosenOne = r.ints(0, top).findFirst().getAsInt();
+                	  finalBoard = allBoards.get(theChosenOne);
+                  } else {
+                	  finalBoard = b;
+                  }
                 }
             } else {
                 beta = Math.min(beta, minimaxAlfaBeta(b, alfa, beta, true, deep));
@@ -322,7 +336,7 @@ public class Board {
         for (Integer row = 0; row < ROWS; row++) {
             for (Integer column = 0; column < COLUMNS; column++) {
                 for (Integer num = 1; num <= 9; num++) {
-                    if ((board.isValidNumber(num, row, column)) && (board.board[row][column].equals(0)) && (sons.size() < 75)) {
+                    if ((board.isValidNumber(num, row, column)) && (board.board[row][column].equals(0) && (sons.size() < 100))) {
                         Board newboard = board.cloneBoard();
                         newboard.setCell(num, row, column);
                         sons.add(newboard);
@@ -365,6 +379,9 @@ public class Board {
                     }
                 }
             }
+        }
+        if ((board.value % 2 == 0)) {
+        	board.value++;
         }
     }
 

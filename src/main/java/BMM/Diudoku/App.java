@@ -16,6 +16,7 @@ public class App {
         System.out.println("|                                 |");
         System.out.println("| 1     PLAY DIUDOKU VS IA        |");
         System.out.println("| 2     SALIR DE LA APP           |");
+        System.out.println("| 3     IA VS IA |EXPERIMENTAL|   |");
         System.out.println("|_________________________________|");
     }
     private static final int MAX_VALUE = Integer.MAX_VALUE;
@@ -28,7 +29,7 @@ public class App {
             printMenu();
             System.out.println("Ingrese una opcion");
             opcion = scann.nextInt();
-            while ((opcion != 1) && (opcion != 2)) {
+            while ((opcion != 1) && (opcion != 2) && (opcion != 3)) {
                 System.out.println("Opcion invalida, intente nuevamente");
                 opcion = scann.nextInt();
             }
@@ -43,6 +44,7 @@ public class App {
                     Boolean validPlay = false;
                     Boolean turn = false;
                     int cont = 0;
+                    int deep = 2;
                     while (!(boardGame.completeBoard())) {
                         cont++;
                         if (turn == false) {
@@ -63,26 +65,12 @@ public class App {
                                 boardGame.setCell(value, row, column);
                             turn = true;
                         } else {
-                            if (cont > 20) {         //Valor de la cantidad de jugadas random al inicio del juego
-                              boardGame.minimaxAlfaBeta(boardGame, alfa, beta, turn, 1);
-                              turn = false;
-                            } else {
-                              int value1, row1, col1;
-                              Random r = new Random();
-                              value1 = r.ints(1, 10).findFirst().getAsInt();
-                              row1 = r.ints(0, 9).findFirst().getAsInt();
-                              col1 = r.ints(0, 9).findFirst().getAsInt();
-                              while (!boardGame.isValidNumber(value1, row1, col1) || (!boardGame.isValidPos(row1, col1))) {
-                                value1 = r.ints(1, 10).findFirst().getAsInt();
-                                row1 = r.ints(0, 9).findFirst().getAsInt();
-                                col1 = r.ints(0, 9).findFirst().getAsInt();                              
-                              } 
-                                System.out.println("Row: " + row1 + "Column: " + col1);
-                                boardGame.setCell(value1, row1, col1);
-                              turn = false;
+                            if (cont > 0)
+                            	deep = 1;	
+                            boardGame.minimaxAlfaBeta(boardGame, alfa, beta, turn, deep);
+                            turn = false;
                             }
                         }
-                    }
                     if (turn) {
                         System.out.println("WINNER WINNER CHICKEN DINNER");
                     } else {
@@ -92,6 +80,44 @@ public class App {
                 case 2:
                     opcion = 2;
                     break;
+                case 3:
+                	 Board boardGame2 = new Board();
+                	 int alfa2 = MIN_VALUE;
+                	 int beta2 = MAX_VALUE;
+                	 Boolean turn2 = true;
+                	 int deep2 = 2;
+                	 int cont2 = 0;
+                	 Boolean endGame = false;
+                	 Boolean ia1Win = false;
+                	 while (!(endGame)) {
+                		 cont2++;
+                		 if (cont2 > 10)
+                			 deep = 1;
+                		 System.out.println("Juega IA1");
+                		 boardGame2.minimaxAlfaBeta(boardGame2, alfa2, beta2, turn2, deep2);
+                		 System.out.println(boardGame2.toString());
+                		 endGame = boardGame2.completeBoard();
+                		 try {
+                			 Thread.sleep(100);
+                		 }catch(Exception e) { }
+                		 if (!(endGame)) {
+                			System.out.println("Juega IA2");
+                		 	boardGame2.minimaxAlfaBeta(boardGame2, alfa2, beta2, turn2, deep2);
+                		 	System.out.println(boardGame2.toString());
+                		 	endGame = boardGame2.completeBoard();
+                		 	try {
+                   			 Thread.sleep(100);
+                		 	}catch(Exception e) { }
+                		 } else {
+                			 ia1Win = true;
+                		 }
+                			 
+                	 }
+                	 if (ia1Win) {
+                         System.out.println("GANO IA1");
+                     } else {
+                         System.out.println("GANO IA2");
+                     }
             }
         }
 
