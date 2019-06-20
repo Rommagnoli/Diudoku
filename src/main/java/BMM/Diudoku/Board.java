@@ -1,6 +1,6 @@
 package BMM.Diudoku;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Random;
 
 /**
@@ -284,21 +284,19 @@ public class Board {
      * @param beta
      * @return the value of a board
      */
-    public Integer minimaxAlfaBeta(Board board, Integer alfa, Integer beta, Boolean player, Integer deep) {
+    public Integer minimaxAlfaBeta(Board board, Integer alfa, Integer beta, Boolean player, Integer deep, Boolean hardDeep) {
     	bestPlay(board);
-    	Boolean hardDeep = false;
-    	if (deep == 1) {
-    		hardDeep = true;
-    	}
         if ((board.value.equals((board.board.length*board.board.length)+1)) || (deep > 3 )) {
             return board.value;
         }
         deep++;
         Board finalBoard = null;
-        ArrayList<Board> allBoards = generateSon(board);
+        LinkedList<Board> allBoards = generateSon(board);
+        if (allBoards.size() > 1)
+        	dicotomicSort(allBoards);
         for (Board b : allBoards) {
             if (player) {
-                int v = minimaxAlfaBeta(b, alfa, beta, false, deep);
+                int v = minimaxAlfaBeta(b, alfa, beta, false, deep, hardDeep);
                 if (alfa < v) {
                   alfa = v;
                   if (!hardDeep) {
@@ -312,7 +310,7 @@ public class Board {
                   }
                 }
             } else {
-                beta = Math.min(beta, minimaxAlfaBeta(b, alfa, beta, true, deep));
+                beta = Math.min(beta, minimaxAlfaBeta(b, alfa, beta, true, deep, hardDeep));
             }
         }
         if (finalBoard != null) {
@@ -331,8 +329,8 @@ public class Board {
      * @param board
      * @return son of the board
      */
-    private ArrayList<Board> generateSon(Board board) {
-    	ArrayList<Board> sons = new ArrayList<Board>();
+    private LinkedList<Board> generateSon(Board board) {
+    	LinkedList<Board> sons = new LinkedList<Board>();
         for (Integer row = 0; row < ROWS; row++) {
             for (Integer column = 0; column < COLUMNS; column++) {
                 for (Integer num = 1; num <= 9; num++) {
@@ -433,4 +431,55 @@ public class Board {
         }
         return s;
     }
+    /**
+     * This method sort the linkedlist boards, seeing the board.value from maximun value to minimun value.
+     * 
+     * @param LinkedList<Board> 
+     */
+    public static void dicotomicSort(LinkedList<Board> a ) {
+		Integer min = 0;
+		Integer max = 1;
+		Boolean put = false;
+		Integer cen;
+		
+		if (a.get(min).value < a.get(max).value) {
+			a.addFirst(a.get(max));
+			a.remove(max+1);
+		}	
+		while(min+max<a.size()-1) {
+			Board aux = a.get(max+1);
+			if (aux.value > a.get(min).value) {
+				a.remove(max+1);
+				a.addFirst(aux);
+				max++;
+			} else if (aux.value > a.get(max).value) {
+				int lastMax = max;
+				while (min<max) {
+					cen = ((min+max)/2);
+					if (a.get(cen).value == aux.value) {
+						a.add(cen+1, aux);
+						a.remove(lastMax+2);
+						put = true;
+						max = lastMax+1;
+						min = 0;
+						break;
+					} else if (a.get(cen).value < aux.value)
+							max = cen-1;
+					else
+						min = cen+1;
+				}
+				if (!put) {
+					
+					a.remove(lastMax+1);
+					a.add(min, aux);
+					max = lastMax+1;
+					min = 0;
+				} else
+					put = false;
+			} else {
+				max++;
+			}	
+		}
+		
+	}
 }

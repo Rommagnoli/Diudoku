@@ -65,9 +65,13 @@ public class App {
                                 boardGame.setCell(value, row, column);
                             turn = true;
                         } else {
-                            if (cont > 0)
-                            	deep = 1;	
-                            boardGame.minimaxAlfaBeta(boardGame, alfa, beta, turn, deep);
+                        	Boolean hardDeep = false;
+                            if (cont > 10) {
+                            	deep = 1;
+                            	hardDeep = true;
+                            	System.out.println("HardDeep");
+                            }
+                            boardGame.minimaxAlfaBeta(boardGame, alfa, beta, turn, deep, hardDeep);
                             turn = false;
                             }
                         }
@@ -91,18 +95,23 @@ public class App {
                 	 Boolean ia1Win = false;
                 	 while (!(endGame)) {
                 		 cont2++;
-                		 if (cont2 > 10)
-                			 deep = 1;
+                		 Boolean hardDeep = false;
+                		 if (cont2 > 10) {
+                			 deep2 = 1;
+                			 hardDeep = true;
+                			 System.out.println("HardDeep");
+                		 }
                 		 System.out.println("Juega IA1");
-                		 boardGame2.minimaxAlfaBeta(boardGame2, alfa2, beta2, turn2, deep2);
+                		 boardGame2.minimaxAlfaBeta(boardGame2, alfa2, beta2, turn2, deep2, hardDeep);
                 		 System.out.println(boardGame2.toString());
                 		 endGame = boardGame2.completeBoard();
                 		 try {
                 			 Thread.sleep(100);
                 		 }catch(Exception e) { }
                 		 if (!(endGame)) {
+                			cont2++;
                 			System.out.println("Juega IA2");
-                		 	boardGame2.minimaxAlfaBeta(boardGame2, alfa2, beta2, turn2, deep2);
+                		 	boardGame2.minimaxAlfaBeta(boardGame2, alfa2, beta2, turn2, deep2, hardDeep);
                 		 	System.out.println(boardGame2.toString());
                 		 	endGame = boardGame2.completeBoard();
                 		 	try {
